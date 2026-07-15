@@ -1,9 +1,5 @@
 # Security Monitoring System on AWS
 
-**Name: Ukah Paul**
-
-**ID: ALT/SOE/025/3013**
-
 🎯 Project Goal
 
 To design and implement a real-time security monitoring and alerting pipeline for AWS that detects access to sensitive resources, generates meaningful alerts, and empowers the security team to respond effectively by thinking like defenders rather than just tool users.
@@ -14,7 +10,7 @@ Functional AWS Account
 
 IAM user with **AdministratorAccess** (for learning only)
 
-AWS region selected (us-east-1 for this Project). 
+AWS region selected (us-east-1 for this Project)
 
 # Phase 1: Infrastructure & Logging Setup
 
@@ -33,7 +29,7 @@ AWS region selected (us-east-1 for this Project).
 - Under Management Events; Under API Activity Tick **Read** & **Write Then click Next**
 - Review the Configurations created for Trail Attributes and Log Events then Click on **Create Trail**
 
-![Cloud Trail has been created Successfully.](image.png)
+![Cloud Trail has been created Successfully.](<screenshots/image.png>)
 
 Cloud Trail has been created Successfully.
 
@@ -46,7 +42,7 @@ Cloud Trail has been created Successfully.
 - Secret Name is: **Production_Database_Credentials;** For Description type: “Honeytoken for security monitoring” then click Next
 - For Configure Rotation: Leave toggled off/disabled, Click Next, Review your configurations and click on **Store.**
 
-![Production_Database_Credentials Secrets created successfully.](image%201.png)
+![Production_Database_Credentials Secrets created successfully.](<screenshots/image%201.png>)
 
 Production_Database_Credentials Secrets created successfully.
 
@@ -67,9 +63,7 @@ The Purpose of this S3 Bucket is to store access logs.
 | `destination-server-access-bucket44` | S3 server access logging | Must be separate from source bucket |
 | `paul-bucket-logs` | CloudTrail logs | Dedicated for auditing AWS API activity |
 
-![Buckets Created Successfully.](image%202.png)
-
-Buckets Created Successfully.
+![Buckets Created Successfully.](<screenshots/image%202.png>) Buckets Created Successfully.
 
 # Phase 2: **Detection Logic – Flow 1**
 
@@ -78,9 +72,6 @@ Buckets Created Successfully.
 1. Go to AWS Console → **CloudWatch** → **Logs → Logs Management**
 2. Find the **log group** for AWS CloudTrail (**paul-loggers**). click on **paul-logger**
 3.  Click **Actions → Create Metric Filter and** input the metric filter below and click Next
-
-{ $.eventName = "GetSecretValue" && $.requestParameters.secretId = "Production_Database_Credentials" }
-
 1. **Assign Metric with the following values**
 - Give the metric a name: **SensitiveAccessAlerts**
 - Choose a namespace: **MySecrets**
@@ -88,7 +79,7 @@ Buckets Created Successfully.
 - Metric Value: **1**
 - Click **Next** → **Create Filter and Click Create Metric Filter**
 
-![Metric Filter called **MySecretTriggers created successfully.**](image%203.png)
+![Metric Filter called **MySecretTriggers created successfully.**](<screenshots/image%203.png>)
 
 Metric Filter called **MySecretTriggers created successfully.**
 
@@ -101,12 +92,12 @@ Metric Filter called **MySecretTriggers created successfully.**
 5. Click Create topic.
 6. In the SNS Topic view, click **Create subscription; for Topic ARN, Click the drop down and choose the ARN matching the topic name:- e.g. “arn:aws:sns:us-east-1:178735646603:SecretsTrigger”**
 7. **Protocol:** Email 
-8. **Endpoint:** Enter my student email: **ukahip@gmail.com**
+8. **Endpoint:** Enter my student email:
 9. Click **Create subscription; Click on Topics and** Under Subscriptions you will see Pending Confirmation for the status of the email we provided.
 10. **Check your inbox** for a confirmation email from AWS.
 11. Click **Confirm subscription** in the email, head back to the Topics Dashboard and you will see the email has changed from **Pending Confirmation** to **Confirmed**
 
-![SNS Topic with Confirmed Email Subscription Created Successfully.](image%204.png)
+![SNS Topic with Confirmed Email Subscription Created Successfully.](<screenshots/image%204.png>)
 
 SNS Topic with Confirmed Email Subscription Created Successfully.
 
@@ -144,7 +135,7 @@ After that I followed these steps to Create the CloudWatch Alarm
 6. **Name Alarm:** **Prod-Secrets-Alarm**
 7. Optional description: **This Alarm is to inform me about access to my AWS Secrets,** then click Next to Preview settings and Click **Create Alarm.**
 
-![Alarm Created and Linked to SNS Topic.](image%205.png)
+![Alarm Created and Linked to SNS Topic.](<screenshots/image%205.png>)
 
 Alarm Created and Linked to SNS Topic.
 
@@ -158,9 +149,9 @@ Before we Create the Event Bridge Rule, we need to create a separate SNS Topic f
 
 **Display Name: My SNS Topic for EventBridge Rule**
 
-I used the the same student email (for AltSchool) for the 1st SNS Topic: **ukahip@gmail.com**
+I used the the same student email  for the 1st SNS Topic: **xxx@emailprovider.com**
 
-![Second SNS Topic linked to Event Bridge Rule Created Successfully.](image%206.png)
+![Second SNS Topic linked to Event Bridge Rule Created Successfully.](<screenshots/image%206.png>)
 
 Second SNS Topic linked to Event Bridge Rule Created Successfully.
 
@@ -201,9 +192,7 @@ After Clicking Next, Configure the following:
 - Execution Role: choose Create a new role for this specific resource
 - Role Name: **Role-for-My-EventBridge-Rule, Click Next then After Reviewing your configurations, Click on Create Rule**
 
-![Event Bridge Rule Created Successfully.](image%207.png)
-
-Event Bridge Rule Created Successfully.
+![Event Bridge Rule Created Successfully.](<screenshots/image%207.png>) Event Bridge Rule Created Successfully.
 
 Then we would need to create an **EventBridge rule in us-east-1** that detects whenever someone calls **GetSecretValue** in AWS Secrets Manager via CloudTrail and it also enables EventBridge to send an SNS email. 
 
@@ -221,33 +210,29 @@ aws configure #this allows me to login with my access keys, configure my region 
 
 aws sts get-caller-identity #to verify i have logged in with my access keys
 
-![AWSCLIv2 Configuration on Windows PC](image%208.png)
+![AWSCLIv2 Configuration on Windows PC](<screenshots/image%208.png>)
 
 AWSCLIv2 Configuration on Windows PC
 
-### EventBridge to send an SNS email to my Student Mail (ukahip@gmail.com)
+### EventBridge to send an SNS email to my Mail
 
 Run the command below:
 
 aws events put-rule --name "Secrets-Trigger" --event-bus-name "default" --state "ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS" --event-pattern "{\"source\":[\"aws.secretsmanager\"],\"detail-type\":[\"AWS API Call via CloudTrail\"],\"detail\":{\"eventSource\":[\"[secretsmanager.amazonaws.com](http://secretsmanager.amazonaws.com/)\"],\"eventName\":[\"GetSecretValue\"]}}" --region us-east-1
 
-![Command was successful](image%209.png)
+![Command was successful](<screenshots/image%209.png>) Command was successfully executed
 
-Command was successful
-
-![Our EventBridge Rule Status shows its “Enabled (with CloudTrail read-only Management events)”](image%2010.png)
+![Our EventBridge Rule Status shows its “Enabled (with CloudTrail read-only Management events)”](<screenshots/image%2010.png>)
 
 Our EventBridge Rule Status shows its “Enabled (with CloudTrail read-only Management events)”
 
 We also received an email response to show the command was successful.
 
-![Event Bridge Email ](image%2011.png)
+![Event Bridge Email ](<screenshots/image%2011.png>) Event Bridge Email
 
-Event Bridge Email 
+![image.png](<screenshots/image%2012.png>)
 
-![image.png](image%2012.png)
-
-### Step 2: The Breach: Use the **AWS CLI** to retrieve the secret value.
+### Step 2: The Breach: Use the **AWS CLI** to retrieve the secret value
 
 Since we have installed AWS CLIv2 on our Windows 11 Host we can proceed to run this command below:
 
@@ -255,21 +240,17 @@ Since we have installed AWS CLIv2 on our Windows 11 Host we can proceed to run t
 aws secretsmanager get-secret-value --secret-id Production_Database_Credentials
 ```
 
-![image.png](image%2013.png)
+![image.png](<screenshots/image%2013.png>)
 
 EventBridge Alert came immediately upon  running this command:
 
 Timestamp: 12:13PM Nigerian Time
 
-![Event Bridge Email](image%2014.png)
-
-Event Bridge Email
+![Event Bridge Email](<screenshots/image%2014.png>) Event Bridge Email
 
 The Alarm Email came in 3 mins later by 12:16PM Nigerian Time
 
-![CloudWatch Metric Alarm](image%2015.png)
-
-CloudWatch Metric Alarm
+![CloudWatch Metric Alarm](<screenshots/image%2015.png>) CloudWatch Metric Alarm
 
 ### **Phase 4: The “Active Defense” Kill-Switch (Using Lambda)**
 
@@ -284,9 +265,7 @@ I will be creating a simple **AWS Lambda** function (using Python or Node.js) 
 5. Architecture: x86_64 (default)
 6. Click Create Function
 
-![Lambda Function Created Successfully.](image%2016.png)
-
-Lambda Function Created Successfully.
+![Lambda Function Created Successfully.](<screenshots/image%2016.png>) Lambda Function Created Successfully.
 
 So I will create a python code that applies AWSDenial of Policy to anyone (IAM User) who tries to access the Secrets, which means the User will not have access to the Secret we created earlier.
 
@@ -301,7 +280,7 @@ iam.attach_user_policy(UserName=username, PolicyArn='arn:aws:iam::aws:policy/AWS
 return {'status': 'Neutralized', 'user': username}
 ```
 
-![Lambda Function has been updated successfully.](image%2017.png)
+![Lambda Function has been updated successfully.](<screenshots/image%2017.png>)
 
 Lambda Function has been updated successfully.
 
@@ -309,7 +288,7 @@ Lambda Function has been updated successfully.
 - Click on the Configuration Tab → Permissions (Left Hand Side) → Click on the Role Name (SecretsKillSwitch-role-9b8n0f4r) and you will be directed to IAM Page for the SecretKillSwitch Role
 - On the Permission Tab, Click on Add Permissions → Attach Policies→ Search for “IAMFullAccess” Tick it and click on add Permission
 
-![Policy Attached to SecretKillSwitch Role](image%2018.png)
+![Policy Attached to SecretKillSwitch Role](<screenshots/image%2018.png>)
 
 Policy Attached to SecretKillSwitch Role
 
@@ -325,7 +304,7 @@ before we run this using Windows 11 CMD, we must verify we are logged in to the 
 aws sts get-caller-identity #this verifies we are signed in our IAM User
 ```
 
-![Permission has been granted successfully to the Lambda Function.](image%2019.png)
+![Permission has been granted successfully to the Lambda Function.](<screenshots/image%2019.png>)
 
 Permission has been granted successfully to the Lambda Function.
 
@@ -335,11 +314,9 @@ So the next thing we need to do is to add our Lambda Function (**SecretsKillSwit
 
 aws events put-targets --rule "Secrets-Trigger" --targets "Id"="1","Arn"="arn:aws:lambda:us-east-1:178735646603:function:SecretsKillSwitch" --region us-east-1
 
-![Target has been attacjed successfully without any errors.](image%2020.png)
+![Target has been attacked successfully without any errors.](<screenshots/image%2020.png>) Target has been attacked successfully without any errors.
 
-Target has been attacjed successfully without any errors.
-
-![Lambda Function “SecretsKillSwitch” has been attached to Events Bridge Rule “Secrets-Trigger”.](image%2021.png)
+![Lambda Function “SecretsKillSwitch” has been attached to Events Bridge Rule “Secrets-Trigger”.](<screenshots/image%2021.png>)
 
 Lambda Function “SecretsKillSwitch” has been attached to Events Bridge Rule “Secrets-Trigger”.
 
@@ -358,7 +335,7 @@ These are the steps to create the IAM User using an IAM Account with Administrat
 - Description Tag: Testing Secret Access for VictimUser
 - Click on Create Access Key and Download .csv file and store safely
 
-![IAM User “VictimUser” Created Successfully.](image%2022.png)
+![IAM User “VictimUser” Created Successfully.](<screenshots/image%2022.png>)
 
 IAM User “VictimUser” Created Successfully.
 
@@ -370,7 +347,7 @@ aws configure #this allows us to login to our user using the access keys
 aws sts get-caller-identity #this confirms we are logged in to "**VictimUser**"
 ```
 
-![Successful login to VictimUser](image%2023.png)
+![Successful login to VictimUser](<screenshots/image%2023.png>)
 
 Successful login to VictimUser
 
@@ -380,15 +357,15 @@ Then let’s try to retrieve our secret using the “**VictimUser**” IAM User 
 aws secretsmanager get-secret-value --secret-id Production_Database_Credentials
 ```
 
-![Secret was accessed by VictimUser](image%2024.png)
+![Secret was accessed by VictimUser](<screenshots/image%2024.png>)
 
 Secret was accessed by VictimUser
 
-![VictimUser was blocked while trying to access it again](image%2025.png)
+![VictimUser was blocked while trying to access it again](<screenshots/image%2025.png>)
 
 VictimUser was blocked while trying to access it again
 
-![AWSDenyAll Policy has been automatically applied](image%2026.png)
+![AWSDenyAll Policy has been automatically applied](<screenshots/image%2026.png>)
 
 AWSDenyAll Policy has been automatically applied
 
@@ -401,19 +378,13 @@ Navigate to CloudTrail and Click on Event History to check the logs, then filter
 - ReadOnly, true
 - Event name & GetSecretValue
 
-![The 1st time we retrieved the secret decrypt operation was applied and that’s why it was successful](image%2027.png)
+![The 1st time we retrieved the secret decrypt operation was applied and that’s why it was successful](<screenshots/image%2027.png>) The 1st time we retrieved the secret decrypt operation was applied and that’s why it was successful
 
-The 1st time we retrieved the secret decrypt operation was applied and that’s why it was successful
+![JSON Success Tag](<screenshots/image%2028.png>) JSON Success Tag
 
-![JSON Success Tag](image%2028.png)
+![image.png](<screenshots/image%2029.png>)
 
-JSON Success Tag
-
-![image.png](image%2029.png)
-
-![Access was denied when we tried to l](image%2030.png)
-
-Access was denied when we tried to l
+![Access was denied when we tried to l](<screenshots/image%2030.png>) Access was denied when we tried to login again as the VictimUser
 
 {
 "eventVersion": "1.11",
@@ -450,4 +421,7 @@ Access was denied when we tried to l
 }
 }
 
-![image.png](image%2031.png)
+![image.png](<screenshots/image%2031.png>)
+
+## Conclusion
+From the results above, when the Victim User tried to access the Secrets that was stored, it was stripped of its IAM User Permission and denied access
