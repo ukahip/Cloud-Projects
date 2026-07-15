@@ -63,7 +63,7 @@ For this we would need to access the IAM Dashboard on the AWS Console and choose
 
 Kindly name the User Group as “Billing_Team” scroll down and save
 
-![Creation of User Group](screenshots/image%207.png>) Creation of User Group
+![Creation of User Group](<screenshots/image%207.png>) Creation of User Group
 
 ![User Group Saved Successfully](<screenshots/image%208.png>) User Group Saved Successfully
 
