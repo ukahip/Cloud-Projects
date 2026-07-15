@@ -36,7 +36,7 @@ An EC2 “Start / Stop only” user needs **exactly two permissions**:
 - Click **Next**
 - I will attach the policies manually
 
-![image.png](image.png)
+![image.png](<screenshots/image.png>)
 
 **STEP 2: Create a Custom Policy using the Visual Editor**
 
@@ -50,7 +50,7 @@ After clicking Next, You will see the  **Set permissions page**
 
 **1.** Choose the service then select **EC2**
 
-![Select Service and choose EC2](image%201.png)
+![Select Service and choose EC2](<screenshots/image%201.png>)
 
 Select Service and choose EC2
 
@@ -68,11 +68,11 @@ Do **NOT** select:
 - RebootInstances ❌
 - ModifyInstanceAttribute ❌
 
-![Expand Write Actions](image%202.png)
+![Expand Write Actions](<screenshots/image%202.png>)
 
 Expand Write Actions
 
-![Scroll down and Tick Only StartInstances & StopInstances.](image%203.png)
+![Scroll down and Tick Only StartInstances & StopInstances.](<screenshots/image%203.png>)
 
 Scroll down and Tick Only StartInstances & StopInstances.
 
@@ -80,7 +80,7 @@ Then Click on Resources and choose a specific EC2 that’s already existing, to 
 
 [I will have to retrieve the instance ID of the EC2 Instance from searching EC2 → Instances → choosing the Specific Instance and checking for the instance ID then copy it.]
 
-![image.png](image%204.png)
+![image.png](<screenshots/image%204.png>)
 
 Then head back to  Resources on the Create Policy Page then do the following using the Visual Editor:
 
@@ -89,19 +89,19 @@ Then head back to  Resources on the Create Policy Page then do the following usi
 - Fill it in like this:
 - **Region**:: The region your instance is in (e.g. mine is eu-north-1)
 
-![image.png](image%205.png)
+![image.png](<screenshots/image%205.png>)
 
 - **Resource Instance** : Paste the Instance ID for the EC2 you copied earlier then click on Add ARNs
 
 You will have the below screenshot after filling all the details.
 
-![Specific ARN for EC2 with Instance ID: i-09201cc89e07ecdb6](image%206.png)
+![Specific ARN for EC2 with Instance ID: i-09201cc89e07ecdb6](<screenshots/image%206.png>)
 
 Specific ARN for EC2 with Instance ID: i-09201cc89e07ecdb6
 
 After Adding the ARN, then click on Next.
 
-![After Adding the ARN, then click on Next.](image%207.png)
+![After Adding the ARN, then click on Next.](<screenshots/image%207.png>)
 
 After Adding the ARN, then click on Next.
 
@@ -113,17 +113,17 @@ Description: This Policy allows an IAM user called ec2-operators to start and st
 
 Then click on create policy.
 
-![You will see the Review and Create Page, Kindly fill in the Name of the Policy and Description](image%208.png)
+![You will see the Review and Create Page, Kindly fill in the Name of the Policy and Description](<screenshots/image%208.png>)
 
 You will see the Review and Create Page, Kindly fill in the Name of the Policy and Description
 
-![Policy created successfully.](image%209.png)
+![Policy created successfully.](<screenshots/image%209.png>)
 
 Policy created successfully.
 
 When you click on View Policy, you can see the JSON Version of what we created by clicking on Policy Version and clicking on the Version 1 (+) plus sign to open it
 
-![image.png](image%2010.png)
+![image.png](<screenshots/image%2010.png>)
 
 {
 "Version": "2012-10-17",
@@ -146,23 +146,23 @@ We are going to attach the Policy we created to the IAM User we also created ear
 
 Kindly head back to the set permissions page where we were creating the IAM user and we would see the policy we just created, if you cannot see it click on the refresh policies icon.
 
-![If you cannot see the policy you created then click on the refresh policies icon.](image%2011.png)
+![If you cannot see the policy you created then click on the refresh policies icon.](<screenshots/image%2011.png>)
 
 If you cannot see the policy you created then click on the refresh policies icon.
 
 From the screenshot above, we can see the policy we just created, we would tick it and click on next.
 
-![Tick the Created policy and click on Next](image%2012.png)
+![Tick the Created policy and click on Next](<screenshots/image%2012.png>)
 
 Tick the Created policy and click on Next
 
 The Review & Create Page will be loaded then you can review then click on the Create User Button
 
-![Click on Create User after Reviewing the details of the User and the attached policy.](image%2013.png)
+![Click on Create User after Reviewing the details of the User and the attached policy.](<screenshots/image%2013.png>)
 
 Click on Create User after Reviewing the details of the User and the attached policy.
 
-![User has been created successfully.](image%2014.png)
+![User has been created successfully.](<screenshots/image%2014.png>)
 
 User has been created successfully.
 
@@ -172,7 +172,7 @@ To Create the Access Keys for the IAM User, Kindly click on View from the User C
 
 Then Click on Create Access Key, we are doing this because we didn’t assign the IAM User access to the AWS Management Console.
 
-![Create Access Key for IAM User (ec2-operators)](image%2015.png)
+![Create Access Key for IAM User (ec2-operators)](<screenshots/image%2015.png>)
 
 Create Access Key for IAM User (ec2-operators)
 
@@ -182,11 +182,11 @@ When you click on create access key, you will be redirected to this page, Kindly
 
 For this, you will need to install the AWS CLI V2 on the Machine you intend to use
 
-![Choose CLI and Click on Next](image%2016.png)
+![Choose CLI and Click on Next](<screenshots/image%2016.png>)
 
 Choose CLI and Click on Next
 
-![Fill in the Description for the purpose of creating the access key](image%2017.png)
+![Fill in the Description for the purpose of creating the access key](<screenshots/image%2017.png>)
 
 Fill in the Description for the purpose of creating the access key
 
@@ -208,7 +208,7 @@ sudo ./aws/install
 
 aws --version #This verifies the version of the AWS CLI.
 
-![Install AWS CLI V2 on Ubuntu Machine](image%2018.png)
+![Install AWS CLI V2 on Ubuntu Machine](<screenshots/image%2018.png>)
 
 Install AWS CLI V2 on Ubuntu Machine
 
@@ -225,7 +225,7 @@ aws sts get-caller-identity #this verifies if i am logged in
 
 ```
 
-![logging in to our IAM User on Ubuntu](image%2019.png)
+![logging in to our IAM User on Ubuntu](<screenshots/image%2019.png>)
 
 logging in to our IAM User on Ubuntu
 
@@ -237,7 +237,7 @@ So we want to start our instance with instance ID: i-09201cc89e07ecdb6 by runnin
 
 aws ec2 start-instances --instance-ids i-09201cc89e07ecdb6
 
-![Instance started successfully](image%2020.png)
+![Instance started successfully](<screenshots/image%2020.png>)
 
 Instance started successfully
 
@@ -245,7 +245,7 @@ From the response above, it shows that the EC2 Instance was powered off and its 
 
 Checking from the AWS Console using my IAM User with Admin Access, the instance is running.
 
-![Instance was started and currently running when confirmed by IAM User with Admin Access](image%2021.png)
+![Instance was started and currently running when confirmed by IAM User with Admin Access](<screenshots/image%2021.png>)
 
 Instance was started and currently running when confirmed by IAM User with Admin Access
 
@@ -257,13 +257,13 @@ Terminate Instance
 
 aws ec2 terminate-instances --instance-ids i-09201cc89e07ecdb6
 
-![Unauthorized Operation when terminating  instance.](image%2022.png)
+![Unauthorized Operation when terminating  instance.](<screenshots/image%2022.png>)
 
 Unauthorized Operation when terminating  instance.
 
 Response:
 
- (UnauthorizedOperation) when calling the TerminateInstances operation: You are not authorized to perform this operation. User: arn:aws:iam::178735646603:user/ec2-operators is not authorized to perform: ec2:TerminateInstances on resource: arn:aws:ec2:eu-north-1:178735646603:instance/i-09201cc89e07ecdb6 because no identity-based policy allows the ec2:TerminateInstances action. 
+ (UnauthorizedOperation) when calling the TerminateInstances operation: You are not authorized to perform this operation. User: arn:aws:iam::178735646603:user/ec2-operators is not authorized to perform: ec2:TerminateInstances on resource: arn:aws:ec2:eu-north-1:178735646603:instance/i-09201cc89e07ecdb6 because no identity-based policy allows the ec2:TerminateInstances action
 
 From the response we can see the IAM User isn’t authorized to perform the operation to terminate this specific instance.
 
@@ -273,7 +273,7 @@ To check the Instance status, we would use this command
 
 aws ec2 describe-instances --instance-ids i-09201cc89e07ecdb6
 
-![Unauthorized Operation when checking instance status](image%2023.png)
+![Unauthorized Operation when checking instance status](<screenshots/image%2023.png>)
 
 Unauthorized Operation when checking instance status
 
@@ -287,7 +287,7 @@ To stop this instance, we would run this command:
 
 aws ec2 stop-instances --instance-ids i-09201cc89e07ecdb6
 
-![Instance was stopped](image%2024.png)
+![Instance was stopped](<screenshots/image%2024.png>)
 
 Instance was stopped
 
@@ -295,6 +295,6 @@ From the Response above, it shows the previous state was running but it’s bein
 
 Validating using an IAM User with Admin Access shows it has actually stopped.
 
-![Instance was stopped when confirmed with IAM User with Admin access.](image%2025.png)
+![Instance was stopped when confirmed with IAM User with Admin access.](<screenshots/image%2025.png>)
 
 Instance was stopped when confirmed with IAM User with Admin access.
